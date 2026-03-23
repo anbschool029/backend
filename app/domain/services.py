@@ -74,11 +74,11 @@ Now generate the standardized, clear, and uniform documented version of the prov
             styles_str = json.dumps(request.styles)
             if request.mode == "explain":
                 saved_id = await self.history_client.create_explain_history(
-                    request.code, styles_str, request.custom_style, str(result)
+                    request.code, styles_str, request.custom_style, str(result), request.user_id
                 )
             else:
                 saved_id = await self.history_client.create_generate_docs_history(
-                    request.code, styles_str, request.custom_style, str(result)
+                    request.code, styles_str, request.custom_style, str(result), request.user_id
                 )
 
         return {

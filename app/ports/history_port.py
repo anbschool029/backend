@@ -8,12 +8,12 @@ class HistoryPort(ABC):
     """
     
     @abstractmethod
-    async def create_generate_docs_history(self, code: str, styles: str, custom_style: str, result: str) -> str:
+    async def create_generate_docs_history(self, code: str, styles: str, custom_style: str, result: str, user_id: str) -> str:
         """Saves GenDocs payload and returns the UUID."""
         raise NotImplementedError
         
     @abstractmethod
-    async def create_explain_history(self, code: str, styles: str, custom_style: str, result: str) -> str:
+    async def create_explain_history(self, code: str, styles: str, custom_style: str, result: str, user_id: str) -> str:
         """Saves Explain payload and returns the UUID."""
         raise NotImplementedError
 
@@ -28,12 +28,12 @@ class HistoryPort(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_all_docs_history(self) -> list:
+    async def get_all_docs_history(self, user_id: str) -> list:
         """Retrieves all docs history concisely mapped."""
         raise NotImplementedError
 
     @abstractmethod
-    async def get_all_explain_history(self) -> list:
+    async def get_all_explain_history(self, user_id: str) -> list:
         """Retrieves all explain history concisely mapped."""
         raise NotImplementedError
 

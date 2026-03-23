@@ -32,6 +32,7 @@ class GenerateDocsHistoryModel(AuditMixin, Base):
     styles_used: Mapped[Optional[str]] = mapped_column(String, nullable=True, index=True)
     custom_style_used: Mapped[Optional[str]] = mapped_column(Text, nullable=True, index=True)
     ai_response: Mapped[str] = mapped_column(Text, index=True)
+    user_id: Mapped[str] = mapped_column(String, index=True)
 
 class ExplainHistoryModel(AuditMixin, Base):
     __tablename__ = "explain_history"
@@ -41,6 +42,7 @@ class ExplainHistoryModel(AuditMixin, Base):
     styles_used: Mapped[Optional[str]] = mapped_column(String, nullable=True, index=True)
     custom_style_used: Mapped[Optional[str]] = mapped_column(Text, nullable=True, index=True)
     ai_response: Mapped[str] = mapped_column(Text, index=True)
+    user_id: Mapped[str] = mapped_column(String, index=True)
 
 async def init_db():
     """Initializes the Sqlite Data file asynchronously."""

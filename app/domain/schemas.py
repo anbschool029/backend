@@ -9,9 +9,17 @@ class DocumentationRequest(BaseModel):
     styles: List[str] = []
     custom_style: str = ""
     mode: str = "code_docs"
+    user_id: str
 
 class ChatRequest(BaseModel):
     """
     Domain Schema: Validates incoming Chat arrays.
     """
     messages: List[Dict[str, Any]]
+
+class LoginRequest(BaseModel):
+    """
+    Domain Schema: Validates the incoming login data.
+    """
+    username: str
+    secret_key: str

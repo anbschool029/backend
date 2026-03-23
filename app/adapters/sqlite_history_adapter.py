@@ -8,25 +8,27 @@ class SQLiteHistoryAdapter(HistoryPort):
     Fulfills the HistoryPort contract utilizing explicit asynchronous SQLAlchemy calls.
     """
     
-    async def create_generate_docs_history(self, code: str, styles: str, custom_style: str, result: str) -> str:
+    async def create_generate_docs_history(self, code: str, styles: str, custom_style: str, result: str, user_id: str) -> str:
         async with AsyncSessionLocal() as session:
             new_record = GenerateDocsHistoryModel(
                 incoming_code=code,
                 styles_used=styles,
                 custom_style_used=custom_style,
-                ai_response=result
+                ai_response=result,
+                user_id=user_id
             )
             session.add(new_record)
             await session.commit()
             return new_record.id
 
-    async def create_explain_history(self, code: str, styles: str, custom_style: str, result: str) -> str:
+    async def create_explain_history(self, code: str, styles: str, custom_style: str, result: str, user_id: str) -> str:
         async with AsyncSessionLocal() as session:
             new_record = ExplainHistoryModel(
                 incoming_code=code,
                 styles_used=styles,
                 custom_style_used=custom_style,
-                ai_response=result
+                ai_response=result,
+                user_id=user_id
             )
             session.add(new_record)
             await session.commit()
@@ -62,20 +64,22 @@ class SQLiteHistoryAdapter(HistoryPort):
                 "createdAT": record.createdAT
             }
 
-    async def get_all_docs_history(self) -> list:
+    async def get_all_docs_history(self, user_id: str) -> list:
         async with AsyncSessionLocal() as session:
             # Order by createdAT descending (newest first)
             result = await session.execute(
                 select(GenerateDocsHistoryModel.id, GenerateDocsHistoryModel.incoming_code, GenerateDocsHistoryModel.createdAT)
+                .where(GenerateDocsHistoryModel.user_id == user_id)
                 .order_by(GenerateDocsHistoryModel.createdAT.desc())
             )
             records = result.all()
             return [{"id": str(r.id), "incoming_code": r.incoming_code, "createdAT": r.createdAT} for r in records]
 
-    async def get_all_explain_history(self) -> list:
+    async def get_all_explain_history(self, user_id: str) -> list:
         async with AsyncSessionLocal() as session:
             result = await session.execute(
                 select(ExplainHistoryModel.id, ExplainHistoryModel.incoming_code, ExplainHistoryModel.createdAT)
+                .where(ExplainHistoryModel.user_id == user_id)
                 .order_by(ExplainHistoryModel.createdAT.desc())
             )
             records = result.all()

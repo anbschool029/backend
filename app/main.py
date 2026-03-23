@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.routers import chat, documentation, history
+from app.api.routers import chat, documentation, history, auth
 from app.adapters.database import init_db
 
 @asynccontextmanager
@@ -25,6 +25,7 @@ app.add_middleware(
 )
 
 # Connect Routes (Primary Driving Adapters)
-app.include_router(chat.router, prefix="/chat", tags=["Chat"])
-app.include_router(documentation.router, prefix="/documentation-generator", tags=["Documentation"])
-app.include_router(history.router, prefix="/history", tags=["History"])
+app.include_router(chat.router, prefix="/api/chat", tags=["Chat"])
+app.include_router(documentation.router, prefix="/api/documentation-generator", tags=["Documentation"])
+app.include_router(history.router, prefix="/api/history", tags=["History"])
+app.include_router(auth.router, prefix="/api/auth", tags=["Auth"])
