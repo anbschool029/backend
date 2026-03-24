@@ -24,6 +24,20 @@ class AuditMixin:
     updateBy: Mapped[Optional[str]] = mapped_column(String, nullable=True, index=True)
     updateAt: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True, onupdate=func.now(), index=True)
 
+class ProjectModel(Base):
+    __tablename__ = "projects"
+    id: Mapped[str] = mapped_column(String, primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
+    name: Mapped[str] = mapped_column(String, index=True)
+    user_id: Mapped[str] = mapped_column(String, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=func.now())
+
+class FileModel(Base):
+    __tablename__ = "files"
+    id: Mapped[str] = mapped_column(String, primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
+    name: Mapped[str] = mapped_column(String, index=True)
+    project_id: Mapped[str] = mapped_column(String, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=func.now())
+
 class GenerateDocsHistoryModel(AuditMixin, Base):
     __tablename__ = "generate_docs_history"
 
@@ -33,6 +47,8 @@ class GenerateDocsHistoryModel(AuditMixin, Base):
     custom_style_used: Mapped[Optional[str]] = mapped_column(Text, nullable=True, index=True)
     ai_response: Mapped[str] = mapped_column(Text, index=True)
     user_id: Mapped[str] = mapped_column(String, index=True)
+    project_id: Mapped[Optional[str]] = mapped_column(String, nullable=True, index=True)
+    file_id: Mapped[Optional[str]] = mapped_column(String, nullable=True, index=True)
 
 class ExplainHistoryModel(AuditMixin, Base):
     __tablename__ = "explain_history"
@@ -43,6 +59,16 @@ class ExplainHistoryModel(AuditMixin, Base):
     custom_style_used: Mapped[Optional[str]] = mapped_column(Text, nullable=True, index=True)
     ai_response: Mapped[str] = mapped_column(Text, index=True)
     user_id: Mapped[str] = mapped_column(String, index=True)
+    project_id: Mapped[Optional[str]] = mapped_column(String, nullable=True, index=True)
+    file_id: Mapped[Optional[str]] = mapped_column(String, nullable=True, index=True)
+
+class UserModel(Base):
+    __tablename__ = "users"
+
+    user_id: Mapped[str] = mapped_column(String, primary_key=True, index=True)
+    nickname: Mapped[str] = mapped_column(String, index=True)
+    tripcode: Mapped[str] = mapped_column(String, index=True)
+    last_active: Mapped[datetime] = mapped_column(DateTime, default=func.now(), onupdate=func.now(), index=True)
 
 async def init_db():
     """Initializes the Sqlite Data file asynchronously."""

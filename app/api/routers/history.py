@@ -15,9 +15,9 @@ async def get_docs_history_endpoint(history_id: str):
     return res
 
 @router.get("/docs")
-async def list_docs_history_endpoint(user_id: str):
-    """Lists all GENERATE DOCS tasks sparsely for a specific user."""
-    return await sqlite_history.get_all_docs_history(user_id)
+async def list_docs_history_endpoint(user_id: str, file_id: str = None):
+    """Lists all GENERATE DOCS tasks sparsely for a specific user, optionally filtered by file."""
+    return await sqlite_history.get_all_docs_history(user_id, file_id=file_id)
 
 @router.delete("/docs/{history_id}")
 async def remove_docs_history_endpoint(history_id: str):
@@ -36,9 +36,9 @@ async def get_explain_history_endpoint(history_id: str):
     return res
 
 @router.get("/explain")
-async def list_explain_history_endpoint(user_id: str):
-    """Lists all EXPLAIN tasks sparsely for a specific user."""
-    return await sqlite_history.get_all_explain_history(user_id)
+async def list_explain_history_endpoint(user_id: str, file_id: str = None):
+    """Lists all EXPLAIN tasks sparsely for a specific user, optionally filtered by file."""
+    return await sqlite_history.get_all_explain_history(user_id, file_id=file_id)
 
 @router.delete("/explain/{history_id}")
 async def remove_explain_history_endpoint(history_id: str):

@@ -10,6 +10,8 @@ class DocumentationRequest(BaseModel):
     custom_style: str = ""
     mode: str = "code_docs"
     user_id: str
+    project_id: str = None
+    file_id: str = None
 
 class ChatRequest(BaseModel):
     """

@@ -3,17 +3,16 @@ from abc import ABC, abstractmethod
 class HistoryPort(ABC):
     """
     Port (Interface) handling persistence of App History.
-    Beginners: This contract allows you to seamlessly switch databases
-    later (like SQLite to MongoDB) by just writing a new Adapter.
+    Now updated to support project-level and file-level management flows.
     """
     
     @abstractmethod
-    async def create_generate_docs_history(self, code: str, styles: str, custom_style: str, result: str, user_id: str) -> str:
+    async def create_generate_docs_history(self, code: str, styles: str, custom_style: str, result: str, user_id: str, project_id: str = None, file_id: str = None) -> str:
         """Saves GenDocs payload and returns the UUID."""
         raise NotImplementedError
         
     @abstractmethod
-    async def create_explain_history(self, code: str, styles: str, custom_style: str, result: str, user_id: str) -> str:
+    async def create_explain_history(self, code: str, styles: str, custom_style: str, result: str, user_id: str, project_id: str = None, file_id: str = None) -> str:
         """Saves Explain payload and returns the UUID."""
         raise NotImplementedError
 
@@ -28,13 +27,13 @@ class HistoryPort(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_all_docs_history(self, user_id: str) -> list:
-        """Retrieves all docs history concisely mapped."""
+    async def get_all_docs_history(self, user_id: str, file_id: str = None) -> list:
+        """Retrieves all docs history concisely mapped, optionally filtered by file."""
         raise NotImplementedError
 
     @abstractmethod
-    async def get_all_explain_history(self, user_id: str) -> list:
-        """Retrieves all explain history concisely mapped."""
+    async def get_all_explain_history(self, user_id: str, file_id: str = None) -> list:
+        """Retrieves all explain history concisely mapped, optionally filtered by file."""
         raise NotImplementedError
 
     @abstractmethod

@@ -24,7 +24,7 @@ class DocumentationService:
             custom_ref_instructions = f"\nADAPT TO THIS CUSTOM FORMAT/TONE/STYLE REFERENCE:\n```\n{request.custom_style}\n```"
 
         if request.mode == "explain":
-            system_prompt = "You are an elite, highly concise expert capable of breaking down complex code into simple, rich Markdown format explanations."
+            system_prompt = "You are AEGen, an elite, highly concise expert in Code Documentation capable of breaking down complex code into simple, rich Markdown format explanations."
             prompt = f'''Generate a clear, completely Markdown-styled explanation for the following code snippet. Focus on helping developers understand the logic.
 
 Code:
@@ -40,7 +40,7 @@ Rules you must strictly follow:
 4. DO NOT provide conversational filler (e.g. "Here is the explanation..."). Output ONLY the final comprehensive markdown guide.
 '''
         else:
-            system_prompt = "You are an elite, highly concise coding assistant. Always respond with the code formatted in Markdown blocks. Detect the language automatically. Provide exactly the documented code block without introductory or concluding conversational text."
+            system_prompt = "You are AEGen, an elite, highly concise coding assistant specializing in Code Documentation. Always respond with the code formatted in Markdown blocks. Detect the language automatically. Provide exactly the documented code block without introductory or concluding conversational text."
             prompt = f'''Generate clean, professional AI-powered documentation for the following code snippet. Focus on eliminating messy docs.
 
 Code:
@@ -74,11 +74,13 @@ Now generate the standardized, clear, and uniform documented version of the prov
             styles_str = json.dumps(request.styles)
             if request.mode == "explain":
                 saved_id = await self.history_client.create_explain_history(
-                    request.code, styles_str, request.custom_style, str(result), request.user_id
+                    request.code, styles_str, request.custom_style, str(result), request.user_id,
+                    project_id=request.project_id, file_id=request.file_id
                 )
             else:
                 saved_id = await self.history_client.create_generate_docs_history(
-                    request.code, styles_str, request.custom_style, str(result), request.user_id
+                    request.code, styles_str, request.custom_style, str(result), request.user_id,
+                    project_id=request.project_id, file_id=request.file_id
                 )
 
         return {
