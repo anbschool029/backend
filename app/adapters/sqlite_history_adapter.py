@@ -16,7 +16,7 @@ class SQLiteHistoryAdapter(HistoryPort):
             await session.execute(
                 update(UserModel)
                 .where(UserModel.user_id == user_id)
-                .values(last_active=datetime.utcnow())
+                .values(last_active=datetime.utcnow(), is_online=True)
             )
             await session.commit()
 

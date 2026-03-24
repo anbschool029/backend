@@ -20,12 +20,10 @@ async def heartbeat_off(request: dict):
         return {"status": "error"}
         
     async with AsyncSessionLocal() as session:
-        # Move last_active back by 20 minutes to force offline status
-        past_time = datetime.utcnow() - timedelta(minutes=20)
         await session.execute(
             update(UserModel)
             .where(UserModel.user_id == user_id)
-            .values(last_active=past_time)
+            .values(is_online=False, last_active=datetime.utcnow())
         )
         await session.commit()
     return {"status": "success"}
@@ -41,11 +39,12 @@ async def upsert_user_activity(user_id: str, nickname: str, tripcode: str):
         result = await session.execute(select(UserModel).where(UserModel.user_id == user_id))
         user = result.scalars().first()
         if not user:
-            user = UserModel(user_id=user_id, nickname=nickname, tripcode=tripcode, last_active=datetime.utcnow())
+            user = UserModel(user_id=user_id, nickname=nickname, tripcode=tripcode, last_active=datetime.utcnow(), is_online=True)
             session.add(user)
         else:
             user.nickname = nickname
             user.tripcode = tripcode
+            user.is_online = True
             user.last_active = datetime.utcnow()
         await session.commit()
 

@@ -26,16 +26,12 @@ async def get_leaderboard_and_activity():
             docs_count = (await session.execute(docs_count_stmt)).scalar()
             explain_count = (await session.execute(explain_count_stmt)).scalar()
             
-            # Identity Logic: Online if active in the last 15 minutes
-            # Using utcnow() as func.now() in SQLite is usually UTC
-            is_online = (datetime.utcnow() - user.last_active) < timedelta(minutes=15)
-            
             results.append({
                 "tripcode": user.tripcode,
                 "nickname": user.nickname,
                 "docs_count": docs_count or 0,
                 "explain_count": explain_count or 0,
-                "is_online": is_online,
+                "is_online": user.is_online, # Use explicit boolean
                 "last_active": user.last_active.isoformat()
             })
             

@@ -68,6 +68,7 @@ class UserModel(Base):
     user_id: Mapped[str] = mapped_column(String, primary_key=True, index=True)
     nickname: Mapped[str] = mapped_column(String, index=True)
     tripcode: Mapped[str] = mapped_column(String, index=True)
+    is_online: Mapped[bool] = mapped_column(default=True, index=True)
     last_active: Mapped[datetime] = mapped_column(DateTime, default=func.now(), onupdate=func.now(), index=True)
 
 async def init_db():
